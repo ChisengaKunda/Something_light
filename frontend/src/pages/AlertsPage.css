@@ -1,0 +1,46 @@
+.alerts-page {
+  padding: 1rem;
+}
+
+.alerts-page h2 {
+  font-size: 1.5rem;
+  color: #1e3a8a; /* blue-800 */
+  margin-bottom: 1rem;
+}
+
+.no-alerts {
+  color: #4b5563; /* gray-600 */
+  font-style: italic;
+}
+
+.alerts-list {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+}
+
+.alert-card {
+  background-color: #fef2f2;
+  border: 1px solid #fecaca;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  text-decoration: none;
+  color: #991b1b; /* red-800 */
+  transition: background-color 0.2s ease;
+}
+
+.alert-card:hover {
+  background-color: #fee2e2;
+}
+
+.alert-card h3 {
+  font-size: 1.2rem;
+  color: #b91c1c;
+  margin-bottom: 0.5rem;
+}
+
+.alert-card ul {
+  margin-top: 0.5rem;
+  padding-left: 1.2rem;
+  list-style-type: disc;
+}
