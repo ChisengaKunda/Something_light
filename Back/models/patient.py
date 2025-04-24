@@ -1,6 +1,6 @@
-from pydantic import BaseModel, Field
-from datetime import datetime
-from uuid import uuid4
+from pydantic import BaseModel
+from models.user import UserBase
+from typing import Optional, Dict
 
 class VitalSigns(BaseModel):
     blood_pressure: str
@@ -13,16 +13,14 @@ class LabResults(BaseModel):
     bmp: str
     coagulation_studies: str
 
-class ImagingStudies(BaseModel):
+class Imaging(BaseModel):
     ct_scan: str
 
-class NeurologistConsultation(BaseModel):
+class RemoteConsultation(BaseModel):
     diagnosis: str
     treatment: str
 
-class Patient(BaseModel):
-    id: str = Field(default_factory=lambda: str(uuid4()))
-    name: str
+class Patient(UserBase):
     age: int
     sex: str
     chief_complaint: str
@@ -30,8 +28,9 @@ class Patient(BaseModel):
     nihss_score: int
     vital_signs: VitalSigns
     lab_results: LabResults
-    imaging_studies: ImagingStudies
-    remote_neurologist_consultation: NeurologistConsultation
-    outcome: str
-    disposition: str
-    created_at: str = Field(default_factory=lambda: datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+    imaging_studies: Imaging
+    remote_neurologist_consultation: RemoteConsultation
+    outcome: Optional[str]
+    disposition: Optional[str]
+    created_at: str
+    role: str = "patient"
