@@ -1,0 +1,172 @@
+/*  import google fonts */
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  border: none;
+  outline: none;
+  text-decoration: none;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+body {
+  background: linear-gradient(to right, #e2e2e2, #c9d6ff);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 60px;
+  padding: 20px;
+  background: #fff;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+}
+
+.logo a {
+  color: #000;
+  font-size: 18px;
+  font-weight: 600;
+  margin: 2rem 8rem 2rem 2rem;
+}
+
+.header-icons {
+  display: flex;
+  align-items: center;
+}
+
+.header-icons i {
+  margin-right: 2rem;
+  cursor: pointer;
+}
+
+.container {
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+  flex: 1;
+}
+
+nav {
+  background: #fff;
+}
+
+.side_navbar {
+  padding: 1px;
+  display: flex;
+  flex-direction: column;
+}
+
+.side_navbar span {
+  color: gray;
+  margin: 1rem 3rem;
+  font-size: 12px;
+}
+
+.side_navbar a {
+  width: 100%;
+  padding: 0.8rem 3rem;
+  font-weight: 500;
+  font-size: 15px;
+  color: rgb(100, 100, 100);
+}
+
+.side_navbar a:hover {
+  background: rgb(235, 235, 235);
+}
+
+.side_navbar .active {
+  border-left: 2px solid rgb(100, 100, 100);
+}
+
+.main-body {
+  width: 70%;
+  padding: 1rem;
+}
+
+.promo_card {
+  width: 100%;
+  color: #fff;
+  margin-top: 10px;
+  border-radius: 8px;
+  padding: 0.5rem 1rem 1rem 3rem;
+  background: linear-gradient(to right, #5c6bc0, #2da0a8);
+}
+
+.promo_card h1,
+.promo_card span {
+  margin: 10px 0;
+}
+
+.history_lists {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 20px;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 1rem 0;
+}
+
+.table-container {
+  background: #fff;
+  padding: 1rem;
+  border-radius: 10px;
+  width: 100%;
+}
+
+table {
+  width: 100%;
+  text-align: left;
+  border-collapse: collapse;
+}
+
+table th,
+table td {
+  padding: 0.75rem;
+  font-size: 14px;
+}
+
+table th {
+  background-color: #f2f2f2;
+  font-size: 15px;
+}
+
+table td {
+  color: rgb(100, 100, 100);
+  border-top: 1px solid #e0e0e0;
+}
+
+.add-patient-button {
+  margin-top: 1rem;
+  padding: 10px 20px;
+  background-color: #2da0a8;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.add-patient-button:hover {
+  background-color: #248a92;
+}
+
+.sidebar {
+  width: 15%;
+  padding: 2rem 1rem;
+  background: #fff;
+}
