@@ -19,5 +19,12 @@
     "email": "jdoe@med.com",
     "role": "patient",
     "name": "John Doe"
+  },
+  "Doctor Strange": {
+    "username": "Doctor Strange",
+    "email": "stranged@hotmail.com",
+    "hashed_password": "$2b$12$EwwrPX5CVSHDeVGvqteBme.8XupC3HxAqpleHRGpXdtyMg95wcMY6",
+    "role": "doctor",
+    "name": "Stephen Strange"
   }
 }

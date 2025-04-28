@@ -1,20 +1,22 @@
 import React, { useEffect, useState } from "react";
+import { Link, useNavigate }          from "react-router-dom";
+import axios                          from "axios";
 import "./DoctorHome.css";
-import { Link } from "react-router-dom";
-import axios from "axios";
 
 const DoctorHome = () => {
-  const [patients, setPatients] = useState([]);
+  const [patients,  setPatients]  = useState([]);
   const [followUps, setFollowUps] = useState([]);
+  const username = localStorage.getItem("username") ?? "User";
+  const navigate  = useNavigate();
 
+  /* ----------------------------- data fetch ----------------------------- */
   useEffect(() => {
+    const token = localStorage.getItem("token");
+
     const fetchPatients = async () => {
       try {
-        const token = localStorage.getItem("token");
         const res = await axios.get("http://localhost:8000/patients", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
         });
         setPatients(res.data);
       } catch (err) {
@@ -24,11 +26,8 @@ const DoctorHome = () => {
 
     const fetchFollowUps = async () => {
       try {
-        const token = localStorage.getItem("token");
         const res = await axios.get("http://localhost:8000/follow-ups", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
         });
         setFollowUps(res.data);
       } catch (err) {
@@ -40,40 +39,59 @@ const DoctorHome = () => {
     fetchFollowUps();
   }, []);
 
+  /* -----------------------------  logout  ------------------------------ */
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("username");
+    navigate("/");
+  };
+
+  /* ===================================================================== */
   return (
     <div className="dashboard">
-      <header className="header">
-        <div className="logo">
-          <h3>The Stroker</h3>
-        </div>
-        <div className="header-icons">
-          <i className="fas fa-bell"></i>
-        </div>
-      </header>
-
       <div className="container">
+        {/* ===============  SIDEBAR  =============== */}
         <nav>
           <div className="side_navbar">
-            <span>Main Menu</span>
-            <a href="#" className="active">Dashboard</a>
-            <a href="#">Patients</a>
-            <a href="#">Consultation and Treatment</a>
+            <span className="menu_title">Main Menu</span>
+
+            <Link to="#"               className="active">Dashboard</Link>
+            <Link to="/patients">Patients</Link>
+            <Link to="/consult">Consultation and Treatment</Link>
+
+            {/* pushes the buttons to the bottom */}
+            <div className="grow" />
+
+            {/* user & logout buttons */}
+            <Link   to="/user-profile" className="sidebar-btn user-btn">
+              {username}
+            </Link>
+            <button onClick={handleLogout} className="sidebar-btn logout-btn">
+              Logout
+            </button>
           </div>
         </nav>
 
+        {/* ===============  MAIN CONTENT  =============== */}
         <div className="main-body">
-          <h2>Doctor Home</h2>
+          {/* Promo banner */}
           <div className="promo_card">
             <h1>Welcome to The Stroker</h1>
-            <span>Manage and monitor stroke patients efficiently. Your all-in-one stroke unit dashboard.</span>
+            <span>
+              Manage and monitor stroke patients efficiently. Your all-in-one
+              stroke unit dashboard.
+            </span>
           </div>
 
+          {/* Patients & Follow-Up panels */}
           <div className="history_lists">
+            {/* -------------------- PATIENTS -------------------- */}
             <div className="list1">
               <div className="row">
                 <h4>Patients</h4>
                 <Link to="/patients">See all</Link>
               </div>
+
               <table>
                 <thead>
                   <tr>
@@ -84,16 +102,17 @@ const DoctorHome = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {patients.map((patient, index) => (
-                    <tr key={index}>
-                      <td>{index + 1}</td>
-                      <td>{patient.date_added || "-"}</td>
-                      <td>{patient.Name}</td>
-                      <td>{patient.treatment || "N/A"}</td>
+                  {patients.map((p, idx) => (
+                    <tr key={p.id ?? idx}>
+                      <td>{idx + 1}</td>
+                      <td>{p.date_added || "-"}</td>
+                      <td>{p.Name}</td>
+                      <td>{p.treatment || "N/A"}</td>
                     </tr>
                   ))}
                 </tbody>
               </table>
+
               <div className="add-patient-btn">
                 <Link to="/add-patient">
                   <button>Add Patient</button>
@@ -101,11 +120,13 @@ const DoctorHome = () => {
               </div>
             </div>
 
+            {/* -------------------- FOLLOW-UPS -------------------- */}
             <div className="list2">
               <div className="row">
                 <h4>Follow-Up</h4>
                 <Link to="/follow-up">See all</Link>
               </div>
+
               <table>
                 <thead>
                   <tr>
@@ -115,11 +136,11 @@ const DoctorHome = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {followUps.map((item, index) => (
-                    <tr key={index}>
-                      <td>{index + 1}</td>
-                      <td>{item.patient_name}</td>
-                      <td>{item.follow_up}</td>
+                  {followUps.map((f, idx) => (
+                    <tr key={idx}>
+                      <td>{idx + 1}</td>
+                      <td>{f.patient_name}</td>
+                      <td>{f.follow_up}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -127,7 +148,9 @@ const DoctorHome = () => {
             </div>
           </div>
         </div>
+        {/* ------------ end main-body ------------- */}
       </div>
+      {/* ------------ end container ------------- */}
     </div>
   );
 };
