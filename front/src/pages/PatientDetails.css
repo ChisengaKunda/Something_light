@@ -1,0 +1,118 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
+
+/* GLOBAL RESET */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+/* DASHBOARD LAYOUT */
+.patient-details-dashboard {
+  display: flex;
+  min-height: 100vh;
+  background: linear-gradient(to right, #e2e2e2, #c9d6ff);
+}
+
+/* GRID CONTAINER */
+.patient-details-container {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  width: 100%;
+  gap: 32px;
+  padding: 32px;
+}
+
+/* SIDEBAR */
+.patient-details-side-navbar {
+  background: #ffffff;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 2px 0 8px rgba(0,0,0,0.08);
+  display: flex;
+  flex-direction: column;
+  padding: 32px 0;
+  height: 92vh;
+}
+
+.patient-details-menu-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #000;
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.patient-details-side-navbar a {
+  padding: 16px 28px;
+  font-size: 15px;
+  font-weight: 500;
+  color: #4a4a4a;
+  text-decoration: none;
+  transition: background 0.4s;
+}
+
+.patient-details-side-navbar a:hover {
+  background: #f2f2f2;
+}
+
+.patient-details-active {
+  border-left: 4px solid #2da0a8;
+  background: #f2f2f2;
+  color: #000;
+}
+
+.patient-details-grow {
+  flex-grow: 1;
+}
+
+.patient-details-sidebar-btn {
+  width: 100%;
+  padding: 14px 28px;
+  text-align: center;
+  font-weight: 600;
+  border: none;
+  background: #2da0a8;
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.4s;
+}
+
+.patient-details-sidebar-btn:hover {
+  background: linear-gradient(to right, #5c6bc0, #2da0a8);
+}
+
+/* MAIN CONTENT */
+.patient-details-main-body {
+  background: #fff;
+  border-radius: 24px;
+  padding: 32px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  overflow-y: auto;
+}
+
+.patient-details-main-body h1 {
+  font-size: 28px;
+  font-weight: 600;
+  margin-bottom: 24px;
+  color: #333;
+}
+
+/* DETAILS SECTIONS */
+.details-section {
+  margin-bottom: 32px;
+}
+
+.details-section h2 {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: #2da0a8;
+}
+
+.details-section p {
+  font-size: 14px;
+  margin-bottom: 8px;
+  color: #333;
+}

@@ -1,19 +1,18 @@
-import React from 'react';
-import { Navigate } from 'react-router-dom';
+// src/components/ProtectedRoute.jsx
+import React, { useContext } from "react";
+import { Navigate }          from "react-router-dom";
+import { AuthContext }       from "../context/AuthContext";
 
-const ProtectedRoute = ({ children, requireRole }) => {
-  const token = localStorage.getItem('token');
-  const role  = localStorage.getItem('role');
+export default function ProtectedRoute({ children, requireRole }) {
+  const { auth } = useContext(AuthContext);
 
-  if (!token) {
-    // Not logged in, kick to login
+  if (!auth.token) {
+    // not logged in
     return <Navigate to="/login" replace />;
   }
-  if (requireRole && role !== requireRole) {
-    // Wrong role, could show a 403 page
+  if (requireRole && auth.role !== requireRole) {
+    // wrong role
     return <Navigate to="/login" replace />;
   }
   return children;
-};
-
-export default ProtectedRoute;
+}

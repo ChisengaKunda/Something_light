@@ -1,8 +1,11 @@
-from fastapi import FastAPI
+# Back/main.py
+from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
-from auth.routes import router as auth_router
-from routes.patients import router as patients_router
-from routes.users import router as user_router
+
+from dependencies           import get_current_user
+from routes.users           import router as users_router
+from routes.patients        import router as patients_router
+from routes.alerts          import router as alerts_router   # ← new
 
 app = FastAPI()
 
@@ -14,6 +17,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(patients_router)
-app.include_router(auth_router)
-app.include_router(user_router)
+app.include_router(users_router)
+app.include_router(
+    patients_router,
+    dependencies=[Depends(get_current_user)]
+)
+app.include_router(
+    alerts_router,            # ← register here
+    dependencies=[Depends(get_current_user)]
+)

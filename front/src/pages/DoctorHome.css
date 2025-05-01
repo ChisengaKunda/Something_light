@@ -1,4 +1,3 @@
-/*  Poppins font */
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
 
 /*******************  GLOBAL  *******************/
@@ -16,7 +15,7 @@ body {
 }
 
 /*******************  GRID LAYOUT  *******************/
-.container {
+.doctor-container {
   display: grid;
   grid-template-columns: 260px 1fr;
   width: 100%;
@@ -25,7 +24,7 @@ body {
 }
 
 /*******************  SIDEBAR  *******************/
-nav {
+.doctor-container nav {
   height: 92vh;               
   align-self: center;
   background: #ffffff;
@@ -34,14 +33,15 @@ nav {
   box-shadow: 2px 0 8px rgba(0,0,0,0.08);
 }
 
-.side_navbar {
+.doctor-side-navbar {
   padding: 32px 0;
   display: flex;
   flex-direction: column;
   gap: 6px;
+  height: 100%;            /* push items */
 }
 
-.side_navbar span {
+.doctor-menu-title {
   font-size: 15px;
   font-weight: 700;
   color: #000;
@@ -49,7 +49,7 @@ nav {
   margin-bottom: 28px;
 }
 
-.side_navbar a {
+.doctor-side-navbar a {
   padding: 16px 28px;
   font-size: 15px;
   font-weight: 500;
@@ -57,25 +57,25 @@ nav {
   transition: background 0.4s;
 }
 
-.side_navbar a:not(.sidebar-btn)hover {
+.doctor-side-navbar a:hover:not(.doctor-sidebar-btn) {
   background: #f2f2f2;
   transition: background 0.4s;
 }
 
-.side_navbar .active {
+.doctor-active {
   border-left: 4px solid #2da0a8;
   background: #f2f2f2;
   color: #000;
 }
 
 /*******************  MAIN CONTENT  *******************/
-.main-body {
+.doctor-main-body {
   padding-top: 32px;
   width: 100%;
 }
 
 /***** Promo banner *****/
-.promo_card {
+.doctor-promo-card {
   width: 100%;
   border-radius: 14px;
   padding: 32px 40px;
@@ -85,26 +85,26 @@ nav {
   text-align: left;
 }
 
-.promo_card h1 {
+.doctor-promo-card h1 {
   font-size: 36px;
   font-weight: 700;
   margin-bottom: 10px;
 }
 
-.promo_card span {
+.doctor-promo-card span {
   font-size: 16px;
   opacity: 0.95;
 }
 
 /*******************  DATA PANELS  *******************/
-.history_lists {
+.doctor-history-lists {
   display: flex;
   flex-direction: column;
   gap: 36px;
 }
 
-.list1,
-.list2 {
+.doctor-list1,
+.doctor-list2 {
   background: #ffffff;
   border-radius: 14px;
   padding: 28px;
@@ -112,20 +112,20 @@ nav {
   box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
 
-.row {
+.doctor-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 22px;
 }
 
-.row h4 {
+.doctor-row h4 {
   font-size: 20px;
   font-weight: 600;
   color: #333;
 }
 
-.row a {
+.doctor-row a {
   font-size: 15px;
   font-weight: 500;
   color: #5c6bc0;
@@ -150,13 +150,13 @@ tbody td {
   border-top: 1px solid #e0e0e0;
 }
 
-.add-patient-btn {
+.doctor-add-patient-btn {
   display: flex;
   justify-content: center;
   margin-top: 28px;
 }
 
-.add-patient-btn button {
+.doctor-add-patient-btn button {
   padding: 16px 36px;
   background: #2da0a8;
   color: #fff;
@@ -167,51 +167,52 @@ tbody td {
   transition: background 0.9s;
 }
 
-.add-patient-btn button:hover {
-  background: linear-gradient(to right, #5c6bc0, #2da0a8);;
+.doctor-add-patient-btn button:hover {
+  background: linear-gradient(to right, #5c6bc0, #2da0a8);
 }
 
-/* push menu items up, buttons stay bottom */
-.side_navbar { 
-  display:flex; 
-  flex-direction:column; 
-  height:100%; 
+.doctor-add-patient-link {
+  display: inline-block;
+  padding: 16px 36px;
+  background: #2da0a8;
+  color: #fff;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: background 0.3s;
 }
-.grow{ 
-  flex-grow:1;
- }
-
-/* title styling */
-.menu_title { 
-  font-size:15px; 
-  font-weight:700;
-  text-align:center; 
-  margin-bottom:28px;
- }
 
 /* sidebar buttons */
-.sidebar-btn{
-  width:100%;
-  padding:14px 28px;
-  text-align:center;
-  font-weight:600;
-  border:none;
-  background:#2da0a8;       
-  color:#fff;               
-  text-decoration:none;
-  cursor:pointer;
-  transition:background 0.4s;
+.doctor-sidebar-btn {
+  width: 100%;
+  padding: 14px 28px;
+  text-align: center;
+  font-weight: 600;
+  border: none;
+  background: #2da0a8;
+  color: #fff;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.4s;
 }
 
-.sidebar-btn:hover{
-  background:linear-gradient(to right,#5c6bc0,#2da0a8);
+.doctor-sidebar-btn:hover {
+  background: linear-gradient(to right, #5c6bc0, #2da0a8);
   color: #fff;
 }
 
-.user-btn   { 
-  border-radius:0;
-
+.doctor-user-btn {
+  border-radius: 0;
 }
-.logout-btn { 
-  border-radius:0;
+
+.doctor-logout-btn {
+  border-radius: 0;
+}
+
+.doctor-grow {
+  flex-grow: 1;
+}
+
+.doctor-user-btn {
+  cursor: default;
 }

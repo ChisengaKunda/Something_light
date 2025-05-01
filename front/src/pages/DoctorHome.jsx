@@ -1,81 +1,72 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate }          from "react-router-dom";
-import axios                          from "axios";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 import "./DoctorHome.css";
 
 const DoctorHome = () => {
-  const [patients,  setPatients]  = useState([]);
-  const [followUps, setFollowUps] = useState([]);
-  const username = localStorage.getItem("username") ?? "User";
-  const navigate  = useNavigate();
+  const [patients, setPatients]     = useState([]);
+  const [followUps, setFollowUps]   = useState([]);
+  const username                     = localStorage.getItem("username") ?? "User";
+  const navigate                     = useNavigate();
 
-  /* ----------------------------- data fetch ----------------------------- */
+  // Fetch data on mount
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const token   = localStorage.getItem("token");
+    const headers = { Authorization: `Basic ${token}` };
 
-    const fetchPatients = async () => {
-      try {
-        const res = await axios.get("http://localhost:8000/patients", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setPatients(res.data);
-      } catch (err) {
-        console.error("Error fetching patients:", err);
-      }
-    };
-
-    const fetchFollowUps = async () => {
-      try {
-        const res = await axios.get("http://localhost:8000/follow-ups", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setFollowUps(res.data);
-      } catch (err) {
-        console.error("Error fetching follow-ups:", err);
-      }
-    };
-
-    fetchPatients();
-    fetchFollowUps();
+    Promise.all([
+      axios.get("http://localhost:8000/patients",   { headers }),
+      axios.get("http://localhost:8000/follow-up", { headers }),
+    ])
+      .then(([patientsRes, followUpsRes]) => {
+        setPatients(patientsRes.data);
+        setFollowUps(followUpsRes.data);
+      })
+      .catch((err) => console.error("Error fetching data:", err));
   }, []);
 
-  /* -----------------------------  logout  ------------------------------ */
+  // Logout handler
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("username");
-    navigate("/");
+    navigate("/login");
   };
 
-  /* ===================================================================== */
   return (
-    <div className="dashboard">
-      <div className="container">
-        {/* ===============  SIDEBAR  =============== */}
+    <div className="doctor-dashboard">
+      <div className="doctor-container">
+
+        {/* Sidebar */}
         <nav>
-          <div className="side_navbar">
-            <span className="menu_title">Main Menu</span>
+          <div className="doctor-side-navbar">
+            <span className="doctor-menu-title">Main Menu</span>
 
-            <Link to="#"               className="active">Dashboard</Link>
+            <Link to="/doctor"    className="doctor-active">Dashboard</Link>
             <Link to="/patients">Patients</Link>
-            <Link to="/consult">Consultation and Treatment</Link>
+            <Link to="/treatment">Treatment</Link>
 
-            {/* pushes the buttons to the bottom */}
-            <div className="grow" />
+            {/* pushes user/logout to bottom */}
+            <div className="doctor-grow" />
 
-            {/* user & logout buttons */}
-            <Link   to="/user-profile" className="sidebar-btn user-btn">
+            {/* static user display (hoverable only) */}
+            <span className="doctor-sidebar-btn doctor-user-btn">
               {username}
-            </Link>
-            <button onClick={handleLogout} className="sidebar-btn logout-btn">
+            </span>
+
+            {/* logout */}
+            <button
+              onClick={handleLogout}
+              className="doctor-sidebar-btn doctor-logout-btn"
+            >
               Logout
             </button>
           </div>
         </nav>
 
-        {/* ===============  MAIN CONTENT  =============== */}
-        <div className="main-body">
-          {/* Promo banner */}
-          <div className="promo_card">
+        {/* Main Content */}
+        <div className="doctor-main-body">
+          {/* Promo Banner */}
+          <div className="doctor-promo-card">
             <h1>Welcome to The Stroker</h1>
             <span>
               Manage and monitor stroke patients efficiently. Your all-in-one
@@ -83,15 +74,36 @@ const DoctorHome = () => {
             </span>
           </div>
 
-          {/* Patients & Follow-Up panels */}
-          <div className="history_lists">
-            {/* -------------------- PATIENTS -------------------- */}
-            <div className="list1">
-              <div className="row">
+          {/* Recent Untreated Patients */}
+          <div className="doctor-recent-patients">
+            <h4>Recent Patients (Not Treated)</h4>
+            <ul>
+              {patients
+                .filter((p) => !p.treatment)
+                .slice(0, 4)
+                .map((p, idx) => (
+                  <li key={p.id || idx}>
+                    <span className="date">
+                      {new Date(p.date_added).toLocaleDateString()}
+                    </span>
+                    <span className="name">
+                      <Link to={`/patients/${p.id}`}>{p.Name}</Link>
+                    </span>
+                    <span className="status">Not treated</span>
+                  </li>
+                ))}
+            </ul>
+          </div>
+
+          {/* Patients & Follow-Up Panels */}
+          <div className="doctor-history-lists">
+
+            {/* Patients Table */}
+            <div className="doctor-list1">
+              <div className="doctor-row">
                 <h4>Patients</h4>
                 <Link to="/patients">See all</Link>
               </div>
-
               <table>
                 <thead>
                   <tr>
@@ -103,30 +115,32 @@ const DoctorHome = () => {
                 </thead>
                 <tbody>
                   {patients.map((p, idx) => (
-                    <tr key={p.id ?? idx}>
+                    <tr key={p.id || idx}>
                       <td>{idx + 1}</td>
-                      <td>{p.date_added || "-"}</td>
-                      <td>{p.Name}</td>
-                      <td>{p.treatment || "N/A"}</td>
+                      <td>{new Date(p.date_added).toLocaleDateString()}</td>
+                      <td>
+                        <Link to={`/patients/${p.id}`}>{p.Name}</Link>
+                      </td>
+                      <td>{p.treatment || "Not treated"}</td>
                     </tr>
                   ))}
                 </tbody>
               </table>
 
-              <div className="add-patient-btn">
-                <Link to="/add-patient">
-                  <button>Add Patient</button>
+              {/* Add Patient Button */}
+              <div className="doctor-add-patient-btn">
+                <Link to="/add-patient" className="doctor-add-patient-link">
+                  Add Patient
                 </Link>
               </div>
             </div>
 
-            {/* -------------------- FOLLOW-UPS -------------------- */}
-            <div className="list2">
-              <div className="row">
+            {/* Follow-Up Table */}
+            <div className="doctor-list2">
+              <div className="doctor-row">
                 <h4>Follow-Up</h4>
-                <Link to="/follow-up">See all</Link>
+                <Link to="/treatment">See all</Link>
               </div>
-
               <table>
                 <thead>
                   <tr>
@@ -146,11 +160,10 @@ const DoctorHome = () => {
                 </tbody>
               </table>
             </div>
+
           </div>
         </div>
-        {/* ------------ end main-body ------------- */}
       </div>
-      {/* ------------ end container ------------- */}
     </div>
   );
 };

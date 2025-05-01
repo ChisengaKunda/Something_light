@@ -1,30 +1,14 @@
 {
   "dr_strange": {
-    "username": "dr_strange",
-    "hashed_password": "$2b$12$frqVClCT8c6x1HVE/8mHXu12n44qJCQfmF3sOQmM5dOiqbZFOlmgW",
-    "email": "strange@med.com",
-    "role": "doctor",
-    "name": "Stephen Strange"
+    "password": "secure123",
+    "role": "doctor"
   },
-  "nurse_jane": {
-    "username": "nurse_jane",
-    "hashed_password": "$2b$12$9H9lbFOzq9a1DKYT28YXcOmWOt0dL5tJtavC9/85XGNBLuzOX3psC",
-    "email": "jane@med.com",
-    "role": "nurse",
-    "name": "Jane Doe"
+  "nurse_yo": {
+    "password": "secure321",
+    "role": "nurse"
   },
-  "john_doe": {
-    "username": "john_doe",
-    "hashed_password": "$2b$12$b1BsWgAEUfw5fxGK.RHXgeVMY14BQScYCLj.kce740b3ZW3pkwUgS",
-    "email": "jdoe@med.com",
-    "role": "patient",
-    "name": "John Doe"
-  },
-  "Doctor Strange": {
-    "username": "Doctor Strange",
-    "email": "stranged@hotmail.com",
-    "hashed_password": "$2b$12$EwwrPX5CVSHDeVGvqteBme.8XupC3HxAqpleHRGpXdtyMg95wcMY6",
-    "role": "doctor",
-    "name": "Stephen Strange"
+  "Nurse Dang": {
+    "password": "secure123",
+    "role": "nurse"
   }
 }

@@ -1,0 +1,116 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
+
+.add-patient-dashboard {
+  display: flex;
+  min-height: 100vh;
+}
+
+.add-patient-container {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  flex: 1;
+  gap: 32px;
+  padding: 32px;
+}
+
+.add-patient-side-navbar {
+  background: #fff;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 2px 0 8px rgba(0,0,0,0.08);
+  padding: 32px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  height: 92vh;
+}
+
+.add-patient-menu-title {
+  font-size: 15px;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.add-patient-side-navbar a {
+  padding: 16px 28px;
+  font-size: 15px;
+  font-weight: 500;
+  color: #4a4a4a;
+  text-decoration: none;
+  transition: background 0.3s;
+}
+
+.add-patient-side-navbar a:hover:not(.add-patient-sidebar-btn) {
+  background: #f2f2f2;
+}
+
+.add-patient-active {
+  border-left: 4px solid #2da0a8;
+  background: #f2f2f2;
+  color: #000;
+}
+
+.add-patient-grow {
+  flex-grow: 1;
+}
+
+.add-patient-sidebar-btn {
+  width: 100%;
+  padding: 14px 28px;
+  text-align: center;
+  font-weight: 600;
+  border: none;
+  background: #2da0a8;
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.3s;
+  text-decoration: none;
+}
+
+.add-patient-sidebar-btn:hover {
+  background: linear-gradient(to right, #5c6bc0, #2da0a8);
+}
+
+.add-patient-main-body {
+  background: #fff;
+  border-radius: 24px;
+  padding: 32px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.add-patient-main-body h1 {
+  margin-bottom: 24px;
+}
+
+.add-patient-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.add-patient-form label {
+  font-weight: 600;
+}
+
+.add-patient-form input,
+.add-patient-form select {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.add-patient-form button {
+  align-self: flex-start;
+  margin-top: 24px;
+  padding: 12px 24px;
+  background: #2da0a8;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.add-patient-form button:hover {
+  background: linear-gradient(to right, #5c6bc0, #2da0a8);
+}

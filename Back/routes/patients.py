@@ -1,91 +1,72 @@
-from fastapi import Body, APIRouter, HTTPException, Depends
+from fastapi import APIRouter, Body, HTTPException
 from fastapi.responses import PlainTextResponse
 from typing import List
-from models.patient import Patient
-from db.db_handler import read_db, write_db
-from services.alerts import generate_alerts
+from models.patient        import Patient
+from db.db_handler         import read_db, write_db
+from services.alerts       import generate_alerts
 from services.consultation import generate_consultation
-from services.follow_up import generate_follow_up
-from utils.export import generate_summary
-from auth.dependencies import role_required, get_current_user
+from services.follow_up    import generate_follow_up
+from utils.export          import generate_summary
 
 router = APIRouter(prefix="/patients", tags=["Patients"])
 
 @router.post("/", response_model=Patient)
-def add_patient(patient: Patient, user: dict = Depends(get_current_user)):
-    if user["role"] not in ["nurse", "doctor"]:
-        raise HTTPException(status_code=403, detail="Access denied")
+async def add_patient(patient: Patient):
     db = read_db()
     db.append(patient.dict())
     write_db(db)
     return patient
 
 @router.get("/", response_model=List[Patient])
-def get_all_patients(user: dict = Depends(get_current_user)):
-    if user["role"] not in ["nurse", "doctor"]:
-        raise HTTPException(status_code=403, detail="Access denied")
+async def get_all_patients():
     return read_db()
 
 @router.get("/{patient_id}", response_model=Patient)
-def get_patient_by_id(patient_id: str, user: dict = Depends(get_current_user)):
-    db = read_db()
-    for patient in db:
-        if patient["id"] == patient_id:
-            if user["role"] == "patient" and user["username"] != patient["Name"]:
-                raise HTTPException(status_code=403, detail="Patients can only view their own data")
-            return patient
+async def get_by_id(patient_id: str):
+    for p in read_db():
+        if p["id"] == patient_id:
+            return p
     raise HTTPException(status_code=404, detail="Patient not found")
 
-@router.get("/{patient_id}/alerts", response_model=List[str])
-def get_patient_alerts(patient_id: str, user: dict = Depends(get_current_user)):
-    if user["role"] not in ["nurse", "doctor"]:
-        raise HTTPException(status_code=403, detail="Access denied")
-    db = read_db()
-    for patient in db:
-        if patient["id"] == patient_id:
-            return generate_alerts(patient)
+@router.get(
+    "/{patient_id}/consultation",
+    response_model=str
+)
+async def get_consultation(patient_id: str):
+    for p in read_db():
+        if p["id"] == patient_id:
+            return generate_consultation(p)
     raise HTTPException(status_code=404, detail="Patient not found")
 
-@router.get("/{patient_id}/consultation", response_model=str, dependencies=[Depends(role_required("doctor"))])
-def get_patient_consultation(patient_id: str):
-    db = read_db()
-    for patient in db:
-        if patient["id"] == patient_id:
-            return generate_consultation(patient)
-    raise HTTPException(status_code=404, detail="Patient not found")
-
-@router.get("/{patient_id}/follow-up", response_model=str, dependencies=[Depends(role_required("doctor"))])
-def get_patient_follow_up(patient_id: str):
-    db = read_db()
-    for patient in db:
-        if patient["id"] == patient_id:
-            return generate_follow_up(patient)
+@router.get(
+    "/{patient_id}/follow-up",
+    response_model=str
+)
+async def get_follow_up(patient_id: str):
+    for p in read_db():
+        if p["id"] == patient_id:
+            return generate_follow_up(p)
     raise HTTPException(status_code=404, detail="Patient not found")
 
 @router.get("/{patient_id}/summary", response_class=PlainTextResponse)
-def get_patient_summary(patient_id: str, user: dict = Depends(get_current_user)):
-    db = read_db()
-    for patient in db:
-        if patient["id"] == patient_id:
-            if user["role"] == "patient" and user["username"] != patient["Name"]:
-                raise HTTPException(status_code=403, detail="Patients can only download their own summary")
-            if user["role"] not in ["doctor", "patient"]:
-                raise HTTPException(status_code=403, detail="Access denied")
-            return generate_summary(patient)
+async def get_summary(patient_id: str):
+    for p in read_db():
+        if p["id"] == patient_id:
+            return generate_summary(p)
     raise HTTPException(status_code=404, detail="Patient not found")
 
-@router.put("/{patient_id}", response_model=Patient, dependencies=[Depends(role_required("doctor"))])
-def update_patient(patient_id: str, updated_patient: Patient = Body(...)):
+@router.put("/{patient_id}", response_model=Patient)
+async def update_patient(patient_id: str, updated: Patient = Body(...)):
     db = read_db()
-    for index, patient in enumerate(db):
-        if patient["id"] == patient_id:
-            db[index] = updated_patient.dict()
+    for i, p in enumerate(db):
+        if p["id"] == patient_id:
+            db[i] = updated.dict()
             write_db(db)
-            return updated_patient
+            return updated
     raise HTTPException(status_code=404, detail="Patient not found")
 
-@router.delete("/{patient_id}", dependencies=[Depends(role_required("doctor"))])
-def delete_patient(patient_id: str):
+@router.delete("/{patient_id}")
+async def delete_patient(patient_id: str):
     db = read_db()
     new_db = [p for p in db if p["id"] != patient_id]
     if len(db) == len(new_db):

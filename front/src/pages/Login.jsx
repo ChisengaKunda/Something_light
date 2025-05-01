@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useContext } from 'react';
+import { AuthContext }            from '../context/AuthContext';
 import './Login.css';
-import axios from 'axios';
 
 const Login = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -13,10 +12,10 @@ const Login = () => {
     role: ''
   });
 
-  const navigate = useNavigate();
+  const { login, register } = useContext(AuthContext);
 
   const toggleMode = () => {
-    document.querySelector('.container').classList.toggle('active');
+    document.querySelector('.login-container').classList.toggle('active');
     setIsLogin(!isLogin);
   };
 
@@ -30,29 +29,9 @@ const Login = () => {
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
     try {
-      // build x-www-form-urlencoded body
-      const params = new URLSearchParams();
-      params.append('grant_type', 'password');
-      params.append('username',   loginData.identifier);
-      params.append('password',   loginData.password);
-
-      const res = await axios.post(
-        'http://localhost:8000/auth/token',
-        params,
-        { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
-      );
-
-      // store auth info
-      localStorage.setItem('token',    res.data.access_token);
-      localStorage.setItem('role',     res.data.role);
-      localStorage.setItem('username', res.data.username);
-
-      // redirect by role
-      if (res.data.role === 'doctor') navigate('/doctor');
-      else if (res.data.role === 'nurse') navigate('/nurse');
-      else navigate('/patient');
+      await login(loginData.identifier, loginData.password);
     } catch (err) {
-      console.error(err.response || err);
+      console.error(err);
       alert('Login failed');
     }
   };
@@ -63,18 +42,23 @@ const Login = () => {
       return alert('Password must be less than 15 characters');
     }
     try {
-      await axios.post('http://localhost:8000/auth/create', signupData);
+      await register(
+        signupData.username,
+        signupData.password,
+        signupData.role
+      );
       alert('Account created! Please login.');
       toggleMode();
     } catch (err) {
-      alert('Account creation failed: ' + err.response?.data?.detail);
+      console.error(err);
+      alert('Account creation failed: ' + err.message || err);
     }
   };
 
   return (
-    <div className="container">
+    <div className="login-container">
       {/* Sign-Up Panel */}
-      <div className="form-container sign-up">
+      <div className="login-form-container login-sign-up">
         <form onSubmit={handleSignupSubmit}>
           <h1>Create Account</h1>
           <input
@@ -117,13 +101,13 @@ const Login = () => {
       </div>
 
       {/* Sign-In Panel */}
-      <div className="form-container sign-in">
+      <div className="login-form-container login-sign-in">
         <form onSubmit={handleLoginSubmit}>
           <h1>Sign In</h1>
           <input
             type="text"
             name="identifier"
-            placeholder="Username or Email"
+            placeholder="Username"
             value={loginData.identifier}
             onChange={handleLoginChange}
             required
@@ -136,20 +120,19 @@ const Login = () => {
             onChange={handleLoginChange}
             required
           />
-          <a href="#">Forgot your password?</a>
           <button type="submit">Login</button>
         </form>
       </div>
 
       {/* Toggle Panels */}
-      <div className="toggle-container">
-        <div className="toggle">
-          <div className="toggle-panel toggle-left">
+      <div className="login-toggle-container">
+        <div className="login-toggle">
+          <div className="login-toggle-panel login-toggle-left">
             <h1>Welcome Back!</h1>
             <p>To keep connected with us, please login with your personal info</p>
             <button className="hidden" onClick={toggleMode}>Sign In</button>
           </div>
-          <div className="toggle-panel toggle-right">
+          <div className="login-toggle-panel login-toggle-right">
             <h1>Hello, Friend!</h1>
             <p>Enter your personal details and start your journey with us</p>
             <button className="hidden" onClick={toggleMode}>Sign Up</button>
